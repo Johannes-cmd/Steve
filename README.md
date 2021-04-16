@@ -1,2 +1,2 @@
 # Steve
-soon
+This is the code for the steve prototype and will constantly being updated... 
