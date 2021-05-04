@@ -97,9 +97,8 @@ if (vertical >= 33){
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
 
-     // motorA = vertical-horizontal;
+      motorA = vertical-horizontal;
       motorB = vertical+horizontal;
-      motorA = motorB*3/4
       if (motorB >= 1023){
         motorB = 1023;
       }
@@ -120,9 +119,8 @@ if (vertical >= 33){
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
       
-      //motorA = horizontal-vertical;
+      motorA = horizontal-vertical;
       motorB = horizontal+vertical;
-      motorA = motorB*3/4
       if (motorB >= 1023){
         motorB = 1023;
       }
@@ -153,8 +151,7 @@ if (vertical >= 33){
       digitalWrite(IN4, HIGH);
       
       motorA = vertical-horizontal;
-      //motorB = vertical+horizontal;
-      motorB = motorA*3/4
+      motorB = vertical+horizontal;
         if (motorA >= 1023){
         motorA = 1023;
       }
@@ -175,8 +172,7 @@ if (vertical >= 33){
       digitalWrite(IN4, LOW);
      
       motorA = -horizontal-vertical;
-      //motorB = -horizontal+vertical;
-      motorB = motorA*3/4
+      motorB = -horizontal+vertical;
       if (motorA >= 1023){
         motorA = 1023;
       }
@@ -213,9 +209,8 @@ if (vertical <= 33){
       digitalWrite(IN3, HIGH);
       digitalWrite(IN4, LOW);
 
-      //motorA = -vertical-horizontal;
+      motorA = -vertical-horizontal;
       motorB = -vertical+horizontal;
-      motorA = motorB*3/4
       if (motorB >= 1023){
         motorB = 1023;
       }
@@ -245,9 +240,8 @@ if (vertical <= 33){
     digitalWrite(IN3, HIGH);
     digitalWrite(IN4, LOW);
     
-   // motorA = -vertical+horizontal;
+    motorA = -vertical+horizontal;
     motorB = -vertical-horizontal;
-    motorA = motorB*3/4
     if (motorB >= 1023){
       motorB = 1023;
     }
