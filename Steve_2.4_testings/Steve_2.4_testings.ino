@@ -86,24 +86,22 @@ void onJoystickChange(int16_t i1, int16_t i2) {
 
   //as duas rodas para frente:
 
-  if (i2 >= 33) {   
+  if (i2 >= 13) {   
 
-    if (i1 > 33) {    //se para direita
-      if (i1 * 2 < i2) {
+    if (i1 >= 13) {    //se para direita
+      if (i1 * 2 <= i2) {
         
       digitalWrite(IN1, HIGH);
       digitalWrite(IN2, LOW);
 
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
-      
-      motorA = vertical;
 
-      analogWrite(ENB, motorA);
-      analogWrite(ENA, motorA);
+      analogWrite(ENB, i2);
+      analogWrite(ENA, i2);
 
       Serial.print("frente");
-      Serial.println(vertical);
+      Serial.println(i2);
       }
       
       if (i2 <= i1 / 3) {
@@ -113,11 +111,9 @@ void onJoystickChange(int16_t i1, int16_t i2) {
 
         digitalWrite(IN3, LOW);
         digitalWrite(IN4, HIGH);
-        
-        motorB = horizontal;
 
-        analogWrite(ENB, motorB);
-        analogWrite(ENA, motorB);
+        analogWrite(ENB, i1);
+        analogWrite(ENA, i1);
 
         Serial.println("direita");
       }
@@ -141,26 +137,24 @@ void onJoystickChange(int16_t i1, int16_t i2) {
       }
     }
 
-    if (i1 < 33) {    //se para esquerda:
+    if (i1 <= 13) {    //se para esquerda:
 
-      if (-i1 * 2 < i2) {
+      if (-i1 * 2 <= i2) {
         
       digitalWrite(IN1, HIGH);
       digitalWrite(IN2, LOW);
 
       digitalWrite(IN3, LOW);
       digitalWrite(IN4, HIGH);
-      
-      motorA = vertical;
 
-      analogWrite(ENB, motorA);
-      analogWrite(ENA, motorA);
+      analogWrite(ENB, i2);
+      analogWrite(ENA, i2);
 
       Serial.print("frente");
-      Serial.println(vertical);
+      Serial.println(i2);
       }
             
-      if (i2 <= -i1 / 3) {    //uma roda para frente e uma para traz:
+      if (i2 < -i1 / 3) {    //uma roda para frente e uma para traz:
 
         digitalWrite(IN1, HIGH);
         digitalWrite(IN2, LOW);
@@ -199,11 +193,11 @@ void onJoystickChange(int16_t i1, int16_t i2) {
     }
   }
 
-  if (i2 <= 33) {           //as duas para traz:
+  if (i2 <= 13) {           //as duas para traz:
       
-    if (i1 <= 33) {     //se para esquerda
+    if (i1 <= 13) {     //se para esquerda
  
-      if (-i1 * 2 < -i2) {
+      if (-i1 * 2 <= -i2) {
 
         digitalWrite(IN1, LOW);
         digitalWrite(IN2, HIGH);
@@ -211,16 +205,15 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
 
-        motorB = -i2;
         motorA = -i2;
 
         analogWrite(ENB, motorA);
-        analogWrite(ENA, motorB);
+        analogWrite(ENA, motorA);
         
         Serial.println("traz");
       }
       
-      if (-i2 <= -i1 / 3) {    //uma roda para frente e uma para traz:
+      if (-i2 < -i1 / 3) {    //uma roda para frente e uma para traz:
 
         digitalWrite(IN1, HIGH);
         digitalWrite(IN2, LOW);
@@ -236,7 +229,7 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         Serial.println("esquerda");
       }
       
-      if ((-i1 * 2 > -i2) and (-i2 >= i1 / 3)) {
+      if ((-i1 * 2 > -i2) and (-i2 >= -i1 / 3)) {
 
         digitalWrite(IN1, LOW);
         digitalWrite(IN2, HIGH);
@@ -251,13 +244,13 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         }
         analogWrite(ENA, motorA);
         analogWrite(ENB, motorB);
-      Serial.println("traz esquerda");
-      Serial.println(motorB);
+        Serial.println("traz esquerda");
       }
     }
-     if (i1 >= 33) {    //se para direita
+    
+     if (i1 >= 13) {    //se para direita
 
-        if (i1 * 2 < -i2) {
+        if (i1 * 2 <= -i2) {
 
         digitalWrite(IN1, LOW);
         digitalWrite(IN2, HIGH);
@@ -265,11 +258,10 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
 
-        motorB = -i2;
         motorA = -i2;
 
         analogWrite(ENB, motorA);
-        analogWrite(ENA, motorB);
+        analogWrite(ENA, motorA);
         
         Serial.println("traz");
       }
@@ -281,16 +273,14 @@ void onJoystickChange(int16_t i1, int16_t i2) {
 
         digitalWrite(IN3, LOW);
         digitalWrite(IN4, HIGH);
-        
-        motorB = horizontal;
 
-        analogWrite(ENB, motorB);
-        analogWrite(ENA, motorB);
+        analogWrite(ENB, i1);
+        analogWrite(ENA, i1);
 
         Serial.println("direita");
       }
       
-      if ((i1 * 2 > -i2) and (-i2 >= i1 / 3)) {
+      if ((i1 * 2 > -i2) and (-i2 > i1 / 3)) {
 
         digitalWrite(IN1, LOW);
         digitalWrite(IN2, HIGH);
