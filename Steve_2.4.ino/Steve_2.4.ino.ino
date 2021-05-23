@@ -28,23 +28,13 @@ const int resolution = 8;
 //pra frente
 int a = 0;
 
-int motor = 0;
-
 int aceleracao = 0;
 int acelerado = 0;
 
-int antacelerado = 0;
-
-int parada = 0;
-
+// time
 unsigned long lastExecutedMillis1 = 0;
 unsigned long lastExecutedMillis2 = 0;
 unsigned long lastExecutedMillis3 = 0;
-
-int vertical;
-int horizontal;
-int X;
-int Y;
 
 int motorA;
 int motorB;
@@ -68,17 +58,20 @@ void onWiFi_strengthChange(int32_t i) {
 
 void onJoystickChange(int16_t i1, int16_t i2) {
 
-  vertical = i2;
-  horizontal = i1;
-  X = i1;
-  Y = i2;
 
+if ((i2 == 0) and (i1 == 0)) {
+  
+        digitalWrite(IN1, LOW);
+        digitalWrite(IN2, LOW);
 
-  //as duas rodas para frente:
+        digitalWrite(IN3, LOW);
+        digitalWrite(IN4, LOW);
+}
+else {
+  
+  if (i2 > 0) {   //as duas rodas para frente:
 
-  if (i2 >= 3) {   
-
-    if (i1 >= 3) {    //se para direita
+    if (i1 > 0) {    //se para direita
       if (i1 * 2 <= i2) {
         
       digitalWrite(IN1, HIGH);
@@ -88,9 +81,9 @@ void onJoystickChange(int16_t i1, int16_t i2) {
       digitalWrite(IN4, HIGH);
 
       ledcWrite(speedmB, i2);
-     ledcWrite(speedmA, i2);
+      ledcWrite(speedmA, i2);
 
-      Serial.print("frente");
+      Serial.println("frente");
       Serial.println(i2);
       }
       
@@ -106,6 +99,7 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         ledcWrite(speedmA, i1);
 
         Serial.println("direita");
+        Serial.println(i1);
       }
       
       if ((i1 * 2 > i2) and (i2 >= i1 / 3)) {
@@ -116,18 +110,26 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, LOW);
         digitalWrite(IN4, HIGH);
 
-        motorB = i2 + i1;             // change later to if one is bigger, chose that one...
-        motorA = motorB * 3 / 4;
-        if (motorB >= 255) {
-          motorB = 255;
+        if (i2 > i1) {
+          motorB = i2;
+        } 
+        else if (i2 <= i1) {
+          motorB = i1;
         }
+        
+        motorA = motorB/2;
+
         Serial.println("frente direita");
-        ledcWrite(speedmB, motorA);
-        ledcWrite(speedmA, motorB);
+        Serial.println(motorA);
+        Serial.println(motorB);
+        
+        ledcWrite(speedmB, motorB);
+        ledcWrite(speedmA, motorA);
+        
       }
     }
 
-    if (i1 <= 13) {    //se para esquerda:
+    if (i1 < 0) {    //se para esquerda:
 
       if (-i1 * 2 <= i2) {
         
@@ -152,12 +154,11 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
 
-        motorB = -horizontal;
-
-        ledcWrite(speedmB, motorB);
-        ledcWrite(speedmA, motorB);
+        ledcWrite(speedmB, -i1);
+        ledcWrite(speedmA, -i1);
         
         Serial.println("esquerda");
+        Serial.println(-i1);
       }
       
       if ((-i1 * 2 > i2) and (i2 >= -i1 / 3)) {
@@ -168,24 +169,28 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, LOW);
         digitalWrite(IN4, HIGH);
 
-        motorA = vertical - horizontal;
-        motorB = motorA * 3 / 4;
-        if (motorA >= 255) {
-          motorA = 255;
+        if (i2 > -i1) {
+          motorA = i2;
+        } 
+        else if (i2 <= -i1) {
+          motorA = -i1;
         }
+        
+        motorB = motorA/2;
+
         Serial.println("frente esquerda");
         Serial.println(motorA);
         Serial.println(motorB);
     
-        ledcWrite(speedmB, motorA);
-        ledcWrite(speedmA, motorB);
+        ledcWrite(speedmB, motorB);
+        ledcWrite(speedmA, motorA);
       }
     }
   }
 
-  if (i2 <= 3) {           //as duas para traz:
+  if (i2 < 0) {           //as duas para traz:
       
-    if (i1 <= 3) {     //se para esquerda
+    if (i1 < 0) {     //se para esquerda
  
       if (-i1 * 2 <= -i2) {
 
@@ -201,6 +206,7 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         ledcWrite(speedmA, motorA);
         
         Serial.println("traz");
+        Serial.println(motorA);
       }
       
       if (-i2 < -i1 / 3) {    //uma roda para frente e uma para traz:
@@ -211,12 +217,11 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
 
-        motorB = -horizontal;
-
-        ledcWrite(speedmB, motorB);
-        ledcWrite(speedmA, motorB);
+        ledcWrite(speedmB, -i1);
+        ledcWrite(speedmA, -i1);
         
         Serial.println("esquerda");
+        Serial.println(-i1);
       }
       
       if ((-i1 * 2 > -i2) and (-i2 >= -i1 / 3)) {
@@ -227,18 +232,24 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
 
-        motorB = -i2 - i1;
-        motorA = motorB * 3 / 4;
-        if (motorB >= 255) {
-          motorB = 255;
+        if (-i2 > -i1) {
+          motorB = -i2;
+        } 
+        else if (-i2 <= -i1) {
+          motorB = -i1;
         }
+        
+        motorA = motorB/2;
+
         ledcWrite(speedmA, motorA);
         ledcWrite(speedmB, motorB);
         Serial.println("traz esquerda");
+        Serial.println(motorA);
+        Serial.println(motorB);
       }
     }
     
-     if (i1 >= 3) {    //se para direita
+     if (i1 > 0) {    //se para direita
 
         if (i1 * 2 <= -i2) {
 
@@ -254,6 +265,7 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         ledcWrite(speedmA, motorA);
         
         Serial.println("traz");
+        Serial.println(motorB);
       }
 
       if (-i2 <= i1 / 3) {
@@ -268,6 +280,7 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         ledcWrite(speedmA, i1);
 
         Serial.println("direita");
+        Serial.println(i1);
       }
       
       if ((i1 * 2 > -i2) and (-i2 > i1 / 3)) {
@@ -278,21 +291,27 @@ void onJoystickChange(int16_t i1, int16_t i2) {
         digitalWrite(IN3, HIGH);
         digitalWrite(IN4, LOW);
 
-        motorB = -i2 + i1;
-        motorA = motorB * 3 / 4;
-        if (motorB >= 255) {
-          motorB = 225;
+        if (-i2 > i1) {
+          motorB = -i2;
+        } 
+        else if (-i2 <= i1) {
+          motorB = i1;
         }
-        ledcWrite(speedmA, motorB);
-        ledcWrite(speedmB, motorA);
+       
+        motorA = motorB / 2;
+      
+        ledcWrite(speedmA, motorA);
+        ledcWrite(speedmB, motorB);
         
       Serial.println("traz direita");
-      Serial.println(motorB);
+        Serial.println(motorA);
+        Serial.println(motorB);
       }
     }
   }
 }
 
+}
 
 void onBackwardChange(boolean b) {
   Serial.printf("onBackwardChange: b: %d\n", b);
@@ -302,14 +321,6 @@ void onBackwardChange(boolean b) {
   a = b;
 
   acelerado = 0;
-
- /*
-  if (!b) // test for falsity
-  {
-    parada = 0; // do whatever...
-  }
-  parada = 1;
-*/
 }
 void onForwardChange(boolean b) {
 
@@ -320,15 +331,6 @@ void onForwardChange(boolean b) {
   a = b;
 
   acelerado = 0;
-
-/*
-  if (!b) // test for falsity
-  {
-    parada = 0; // do whatever...
-  }
-  parada = 1;
-*/
-
 }
 void onLeftChange(boolean b) {
   Serial.printf("onLeftChange: b: %d\n", b);
@@ -337,13 +339,6 @@ void onLeftChange(boolean b) {
   a = b;
 
   acelerado = 0;
-/*
-  if (!b) // test for falsity
-  {
-    parada = 0; // do whatever...
-  }
-  parada = 1;
-*/
 }
 void onRightChange(boolean b) {
   Serial.printf("onRightChange: b: %d\n", b);
@@ -352,15 +347,6 @@ void onRightChange(boolean b) {
   a = b;
 
   acelerado = 0;
-/*
-  if (!b) // test for falsity
-  {
-    parada = 0; // do whatever...
-  }
-  else {
-    parada = 1;
-  }
-  */
 }
 void onSpeedChange(int32_t i) {
   Serial.printf("onSpeedChange: i: %d\n", i);
@@ -404,30 +390,23 @@ void setup() {
   ledcAttachPin(ENB, speedmB);
 
 
-
   ledcWrite(speedmA, 100);
   ledcWrite(speedmB, 100);
   digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
   delay(100);
-  ledcWrite(speedmA, 100);
-  ledcWrite(speedmB, 100);
-  digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
   digitalWrite(IN1, LOW);
-  digitalWrite(IN2, LOW);
   delay(50);
-  ledcWrite(speedmA, 100);
-  ledcWrite(speedmB, 100);
   digitalWrite(IN1, HIGH);
-  digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
   digitalWrite(IN4, HIGH);
   delay(100);
-  ledcWrite(speedmA, 100);
-  ledcWrite(speedmB, 100);
+  digitalWrite(IN4, LOW);
+  digitalWrite(IN1, LOW);
+  delay(50);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN4, HIGH);
+  delay(100);
   digitalWrite(IN3, LOW);
   digitalWrite(IN4, LOW);
   digitalWrite(IN1, LOW);
@@ -460,9 +439,9 @@ void loop() {
 
   // app de botoes:
 
-  //menos que 500 (rapido)
+  //menos que 100 (rapido)
 
-  if (acelerado < 500) {
+  if (acelerado < 100) {
 
     if ((a == 1) & (acelerado < aceleracao)) {
 
@@ -488,9 +467,9 @@ void loop() {
       delay(1);
     }
   }
-  // mais que 500 (devagar)
+  // mais que 100 (devagar)
 
-  if (acelerado >= 500) {
+  if (acelerado >= 100) {
 
     if ((a == 1) & (acelerado < aceleracao)) {
 
@@ -516,17 +495,5 @@ void loop() {
       delay(1);
     }
   }
-
-//  if ((a == 0) and (-17 < Y < 17) and (-17 < X < 17) and (Y=X)) {
-//    acelerado = 10;
-//    delay(1);
-//
-//    if (millis() > lastExecutedMillis2 + 500) {
-//      lastExecutedMillis2 = millis();
-//      Serial.print("Stop");
-//      Serial.println();
-//    }
-//  }
-
 
 }
