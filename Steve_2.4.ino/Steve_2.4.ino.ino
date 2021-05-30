@@ -20,9 +20,9 @@ const int ENA = 16; //D3
 const int ENB = 22; //D7
 
 // setting PWM properties
-const int freq = 10000;
+const int freq = 30000;
 const int speedmA = 0;
-const int speedmB = 0;
+const int speedmB = 1;
 const int resolution = 8;
 
 //pra frente
